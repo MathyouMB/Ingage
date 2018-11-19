@@ -12,8 +12,8 @@ chrome = False
 #browser = webdriver.Chrome("C:/PythonPractice/chromedriver.exe")
 browser = webdriver.PhantomJS()
 
-botUsername = "alpacanoodlesoup"
-botPassword = "0-0-0-33"
+botUsername = "k"
+botPassword = "k"
 loginUrl = 'https://www.instagram.com/accounts/login/?source=auth_switcher'
 
 def login():
