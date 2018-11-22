@@ -6,14 +6,14 @@ from selenium.webdriver.common.action_chains import ActionChains
 import string
 from random import gauss
 import random
+import io
 
 
 chrome = False
 #browser = webdriver.Chrome("C:/PythonPractice/chromedriver.exe")
 browser = webdriver.PhantomJS()
 
-botUsername = "k"
-botPassword = "k"
+
 loginUrl = 'https://www.instagram.com/accounts/login/?source=auth_switcher'
 
 def login():
@@ -60,6 +60,9 @@ def scrapeInstaPage(username):
 	print("\nScrapping "+username+" -----")
 	sourceCode = switchTabSource(formatProfileUrl(username))
 	userInfo = getProfileInfo(sourceCode,username)
+	f = open("source.txt","w", encoding="utf-8")
+	f.write(sourceCode)
+	f.close()
 	#picUrls = getPicUrls(sourceCode)
 	#picInfo = getPicInfo(picUrls,userInfo)
 
