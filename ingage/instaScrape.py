@@ -36,7 +36,7 @@ def copySource(url): #converts a page source to a string based on a url
 def switchTabSource(url):
 	#Switch to instagram login screen
 	browser.get(url)
-	#testSleep(4)	
+	testSleep(2)	
 	#Wait till the browser has loaded, then take the source code of the loaded page
 	sourceCode = copySource(browser.current_url)
 	return sourceCode
@@ -61,6 +61,9 @@ def scrapeInstaPage(username):
 	sourceCode = switchTabSource(formatProfileUrl(username))
 	userInfo = getProfileInfo(sourceCode,username)
 	f = open("source.txt","w", encoding="utf-8")
+	#write = sourceCode.rstrip("\n\r")
+	#write = write.strip()
+	#write.replace("\n", " ")
 	f.write(sourceCode)
 	f.close()
 	#picUrls = getPicUrls(sourceCode)
@@ -76,7 +79,6 @@ def scrapeInstaPage(username):
 	print("Followers: "+userInfo[3])
 	print("Following: "+userInfo[4])
 	print("\n[url, likes, comments, date] ----------------")
-	
 	#print(*picInfo, sep='\n')
 	
 	return userInfo
@@ -84,17 +86,21 @@ def scrapeInstaPage(username):
 def getProfileInfo(sourceCode,username):
 	userInfo = []
 	
-	if chrome == True:
-		postNum = findBetween(sourceCode,'<li class="Y8-fY "><span class="-nal3 "><span class="g47SY ">','</span> posts</span></li><li class="Y8-fY ">')
-		followingNum = findBetween(sourceCode,'following/"><span class="g47SY ">','</span> following</a></li></ul><div class="-vDIg">')
-		followerNum = findBetween(sourceCode,'<meta property="og:description" content="',' Followers, '+str(followingNum)+' Following, '+str(postNum)+' Posts - See Instagram photos and videos from ')
-		givenName = findBetween(sourceCode,'See Instagram photos and videos from ',' (@'+username+')" name="description" />')
-	else:
-		postNum = findBetween(sourceCode,'<span class=" _81NM2"><span class="g47SY lOXF2">','</span> posts</span></li><li class=" LH36I">')
-		followingNum = findBetween(sourceCode,'following/"><span class="g47SY lOXF2">','</span> following</a></li></ul><div class="fx7hk">')
-		followerNum = findBetween(sourceCode,'<meta property="og:description" content="',' Followers, '+str(followingNum)+' Following, '+str(postNum)+' Posts - See Instagram photos and videos from ')
-		givenName = findBetween(sourceCode,'See Instagram photos and videos from ',' (@'+username+')" name="description">')
+	
+	description = findBetween(sourceCode,'meta property="og:description" content="',' - See Instagram photos and videos from')
+	#description +=','
+	cells = description.split(',')
+	#print (cells)
+	#print(description)
 
+	postNum = (cells[2].replace(" ","")).replace("Posts","")
+	followingNum = (cells[1].replace(" ","")).replace("Following","")
+	followerNum = (cells[0].replace(" ","")).replace("Followers","")
+	#postNum = cell[2].replace()
+	#followingNum = findBetween(sourceCode,'following/"><span class="g47SY lOXF2">','</span> following</a></li></ul><div class="fx7hk">')
+	#followerNum = findBetween(sourceCode,'<meta property="og:description" content="',' Followers, '+str(followingNum)+' Following, '+str(postNum)+' Posts - See Instagram photos and videos from ')
+	givenName = findBetween(sourceCode,'See Instagram photos and videos from ',' (@'+username+')" name="description">')
+	#print(test)
 
 	#print("------------------------------------")
 	#print("Username: "+username)
